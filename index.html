@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>ขอโทษนะคะน้องวัน 🥺💖</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Kanit & Fredoka -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&family=Kanit:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            font-family: 'Kanit', 'Fredoka', sans-serif;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        /* ธีมสีพื้นหลัง ม่วง-มิ้นต์ และเอฟเฟกต์ลอย */
+        .bg-pastel-gradient {
+            background: linear-gradient(135deg, #EAE0F5 0%, #E8F8F5 50%, #FCE4EC 100%);
+        }
+
+        /* Glassmorphism card */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.65);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 2px solid rgba(255, 255, 255, 0.8);
+            box-shadow: 0 15px 35px rgba(186, 104, 200, 0.15);
+        }
+
+        /* Background Floating Animation */
+        @keyframes floatSlow {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-18px) rotate(8deg); }
+        }
+        .floating-emoji {
+            position: absolute;
+            animation: floatSlow 4s ease-in-out infinite;
+            pointer-events: none;
+            z-index: 1;
+            opacity: 0.75;
+        }
+
+        /* Shake animation for wrong PIN */
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-10px); }
+            40%, 80% { transform: translateX(10px); }
+        }
+        .animate-shake {
+            animation: shake 0.4s ease-in-out;
+        }
+
+        /* Pulse Bounce for PIN Dot */
+        @keyframes pinPop {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.35); }
+            100% { transform: scale(1); }
+        }
+        .pin-pop {
+            animation: pinPop 0.2s ease-out;
+        }
+
+        /* Custom Scrollbar for letter */
+        .custom-scroll::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scroll::-webkit-scrollbar-thumb {
+            background-color: #F48FB1;
+            border-radius: 10px;
+        }
+
+        /* Envelope animation */
+        @keyframes openFlap {
+            0% { transform: rotateX(0deg); }
+            100% { transform: rotateX(180deg); }
+        }
+        .envelope-flap-open {
+            animation: openFlap 0.6s forwards ease-in-out;
+            transform-origin: top;
+        }
+    </style>
+</head>
+<body class="bg-pastel-gradient min-h-screen flex items-center justify-center p-3 relative overflow-x-hidden">
+
+    <!-- ========================================== -->
+    <!-- องค์ประกอบอีโมจิพื้นหลังกระจายๆ น่ารักๆ -->
+    <!-- ========================================== -->
+    <div id="floating-bg" class="fixed inset-0 overflow-hidden pointer-events-none">
+        <span class="floating-emoji text-2xl top-[8%] left-[8%]" style="animation-delay: 0s;">✨</span>
+        <span class="floating-emoji text-3xl top-[15%] right-[10%]" style="animation-delay: 1s;">🌸</span>
+        <span class="floating-emoji text-2xl top-[45%] left-[5%]" style="animation-delay: 2s;">💖</span>
+        <span class="floating-emoji text-3xl top-[65%] right-[8%]" style="animation-delay: 0.5s;">🧸</span>
+        <span class="floating-emoji text-2xl bottom-[12%] left-[12%]" style="animation-delay: 1.5s;">🎀</span>
+        <span class="floating-emoji text-3xl bottom-[8%] right-[15%]" style="animation-delay: 2.5s;">⭐</span>
+    </div>
+
+    <!-- Main Container สำหรับมือถือ -->
+    <main class="w-full max-w-md relative z-10">
+
+        <!-- ========================================== -->
+        <!-- หน้าที่ 1: หน้า PIN ล็อคหน้าจอแบบ iPhone -->
+        <!-- ========================================== -->
+        <section id="screen-1" class="glass-card rounded-[38px] p-6 text-center shadow-2xl transition-all duration-500 min-h-[620px] flex flex-col justify-between">
+            <!-- Header Top Info -->
+            <div class="mt-2">
+                <div class="inline-block bg-purple-100 text-purple-600 font-semibold px-4 py-1.5 rounded-full text-xs mb-3 shadow-sm border border-purple-200">
+                    🔒 Heart Lock Screen
+                </div>
+                <h1 class="text-2xl font-bold text-gray-800 tracking-wide">กรุณาใส่รหัสผ่าน 💖</h1>
+                <p class="text-xs text-gray-500 mt-1">ปลดล็อกเพื่ออ่านความในใจของเค้านะ</p>
+                
+                <!-- ปุ่มคำใบ้ -->
+                <button onclick="showHint()" class="mt-3 text-xs bg-emerald-100 text-emerald-700 px-3 py-1 rounded-full hover:bg-emerald-200 transition-colors inline-flex items-center gap-1">
+                    <i class="fa-solid fa-lightbulb"></i> กดดูคำใบ้ตรงนี้สิ
+                </button>
+            </div>
+
+            <!-- PIN Display Dots (6 จุด) -->
+            <div class="my-6">
+                <div id="pin-dots-container" class="flex justify-center gap-4 py-2">
+                    <div class="pin-dot w-4 h-4 rounded-full border-2 border-purple-400 transition-all duration-200"></div>
+                    <div class="pin-dot w-4 h-4 rounded-full border-2 border-purple-400 transition-all duration-200"></div>
+                    <div class="pin-dot w-4 h-4 rounded-full border-2 border-purple-400 transition-all duration-200"></div>
+                    <div class="pin-dot w-4 h-4 rounded-full border-2 border-purple-400 transition-all duration-200"></div>
+                    <div class="pin-dot w-4 h-4 rounded-full border-2 border-purple-400 transition-all duration-200"></div>
+                    <div class="pin-dot w-4 h-4 rounded-full border-2 border-purple-400 transition-all duration-200"></div>
+                </div>
+                <!-- ข้อความแสดงข้อผิดพลาด -->
+                <p id="pin-error-msg" class="text-xs text-rose-500 mt-2 min-h-[18px] opacity-0 transition-opacity font-medium">รหัสผ่านไม่ถูกต้อง ลองใหม่อีกทีนะ 🥺</p>
+            </div>
+
+            <!-- Numpad Keypad (0-9) -->
+            <div class="grid grid-cols-3 gap-4 px-4 mb-4">
+                <button onclick="pressKey('1')" class="keypad-btn bg-white/70 hover:bg-white text-gray-700 text-xl font-semibold h-14 rounded-full shadow-md active:scale-90 transition-all border border-purple-100 flex items-center justify-center">1</button>
+                <button onclick="pressKey('2')" class="keypad-btn bg-white/70 hover:bg-white text-gray-700 text-xl font-semibold h-14 rounded-full shadow-md active:scale-90 transition-all border border-purple-100 flex items-center justify-center">2</button>
+                <button onclick="pressKey('3')" class="keypad-btn bg-white/70 hover:bg-white text-gray-700 text-xl font-semibold h-14 rounded-full shadow-md active:scale-90 transition-all border border-purple-100 flex items-center justify-center">3</button>
+                <button onclick="pressKey('4')" class="keypad-btn bg-white/70 hover:bg-white text-gray-700 text-xl font-semibold h-14 rounded-full shadow-md active:scale-90 transition-all border border-purple-100 flex items-center justify-center">4</button>
+                <button onclick="pressKey('5')" class="keypad-btn bg-white/70 hover:bg-white text-gray-700 text-xl font-semibold h-14 rounded-full shadow-md active:scale-90 transition-all border border-purple-100 flex items-center justify-center">5</button>
+                <button onclick="pressKey('6')" class="keypad-btn bg-white/70 hover:bg-white text-gray-700 text-xl font-semibold h-14 rounded-full shadow-md active:scale-90 transition-all border border-purple-100 flex items-center justify-center">6</button>
+                <button onclick="pressKey('7')" class="keypad-btn bg-white/70 hover:bg-white text-gray-700 text-xl font-semibold h-14 rounded-full shadow-md active:scale-90 transition-all border border-purple-100 flex items-center justify-center">7</button>
+                <button onclick="pressKey('8')" class="keypad-btn bg-white/70 hover:bg-white text-gray-700 text-xl font-semibold h-14 rounded-full shadow-md active:scale-90 transition-all border border-purple-100 flex items-center justify-center">8</button>
+                <button onclick="pressKey('9')" class="keypad-btn bg-white/70 hover:bg-white text-gray-700 text-xl font-semibold h-14 rounded-full shadow-md active:scale-90 transition-all border border-purple-100 flex items-center justify-center">9</button>
+                
+                <!-- ปุ่มว่างด้านซ้าย -->
+                <div class="flex items-center justify-center">
+                    <span class="text-lg">✨</span>
+                </div>
+                
+                <button onclick="pressKey('0')" class="keypad-btn bg-white/70 hover:bg-white text-gray-700 text-xl font-semibold h-14 rounded-full shadow-md active:scale-90 transition-all border border-purple-100 flex items-center justify-center">0</button>
+                
+                <!-- ปุ่มลบ -->
+                <button onclick="deleteKey()" class="keypad-btn bg-rose-50/70 hover:bg-rose-100 text-rose-500 text-lg font-semibold h-14 rounded-full shadow-md active:scale-90 transition-all border border-rose-100 flex items-center justify-center">
+                    <i class="fa-solid fa-backspace"></i>
+                </button>
+            </div>
+            
+            <p class="text-[11px] text-gray-400">Made with ❤️ for you</p>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- หน้าที่ 2: หน้า Loading หัวใจสุดน่ารัก -->
+        <!-- ========================================== -->
+        <section id="screen-2" class="glass-card rounded-[38px] p-6 text-center shadow-2xl hidden transition-all duration-500 min-h-[620px] flex flex-col justify-between items-center">
+            <div class="w-full">
+                <span class="text-xs bg-pink-100 text-pink-600 px-3 py-1 rounded-full font-medium inline-block mb-3">
+                    ✨ Sending Love & Apology...
+                </span>
+                <h2 class="text-xl font-bold text-gray-800">รอก่อนนะเด่กอ้วน 💖</h2>
+            </div>
+
+            <!-- กรอบรูปโพลารอยด์น่ารักๆ ด้านบนหลอดโหลด -->
+            <div class="relative bg-white p-3 rounded-2xl shadow-xl border border-pink-100 transform -rotate-2 hover:rotate-0 transition-transform duration-300 w-56 my-4">
+                <!-- สติ๊กเกอร์ติดรูปด้านบน -->
+                <div class="absolute -top-3 left-1/2 -translate-x-1/2 w-16 h-5 bg-pink-200/70 backdrop-blur-sm rounded-sm transform rotate-1"></div>
+                
+                <!-- 📸 [แก้ไขรูปภาพคู่ตรงนี้]: เปลี่ยน URL ใน src ด้านล่าง -->
+                <img id="loading-photo" 
+                     src="mhaa.jpg" 
+                     alt="mhaa" 
+                     class="w-full h-48 object-cover rounded-xl border border-gray-100"
+                     onerror="this.src='https://placehold.co/400x400/FCE4EC/C2185B?text=Love+You';">
+                
+                <p class="text-xs text-gray-600 font-medium mt-2 text-center">"เค้ารักและคิดถึงเธอที่สุดเลย 💕"</p>
+            </div>
+
+            <!-- หลอดโหลด (Loading Bar) หัวใจสีชมพู -->
+            <div class="w-full px-4 my-2">
+                <div class="flex justify-between items-center mb-1 text-xs font-semibold text-pink-600">
+                    <span id="loading-status-text">กำลังเริ่มต้น...</span>
+                    <span id="loading-percentage">0%</span>
+                </div>
+                
+                <!-- Track Bar -->
+                <div class="w-full bg-pink-100 h-5 rounded-full p-1 relative shadow-inner overflow-hidden border border-pink-200">
+                    <!-- Progress Bar Color -->
+                    <div id="progress-bar-fill" class="bg-gradient-to-r from-pink-400 to-rose-400 h-full rounded-full transition-all duration-300 w-0 relative flex items-center justify-end">
+                        <span class="text-white text-[10px] pr-1.5 animate-pulse">💖</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ข้อความด้านล่างหลอดโหลด -->
+            <div class="min-h-[40px] flex items-center justify-center">
+                <p id="loading-subtext" class="text-xs text-purple-700 bg-white/80 px-4 py-2 rounded-xl shadow-sm border border-purple-100 font-medium animate-pulse">
+                    กำลังโหลดความรักและคำขอโทษ... 💖
+                </p>
+            </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- หน้าที่ 3: หน้า IG Chat & จดหมายง้อ -->
+        <!-- ========================================== -->
+        <section id="screen-3" class="glass-card rounded-[38px] p-4 text-center shadow-2xl hidden transition-all duration-500 min-h-[620px] flex flex-col justify-between relative overflow-hidden">
+            
+            <!-- IG Header Header Bar -->
+            <div class="flex items-center justify-between pb-3 border-b border-pink-100/80 px-1">
+                <div class="flex items-center gap-2.5">
+                    <!-- 📸 [แก้ไขรูปโปรไฟล์แฟน]: เปลี่ยน src ตรงนี้ -->
+                    <img src="Boom.jpg" 
+                         alt="Boom" 
+                         class="w-9 h-9 rounded-full border-2 border-pink-400 object-cover p-0.5">
+                    <div class="text-left">
+                        <!-- ✏️ [แก้ไขชื่อแฟน/ไอจี]: เปลี่ยนข้อความตรงนี้ -->
+                        <h3 class="text-xs font-bold text-gray-800 flex items-center gap-1">
+                            หม๋าเเก่ของน้องวัน💖 <i class="fa-solid fa-circle-check text-sky-400 text-[10px]"></i>
+                        </h3>
+                        <p class="text-[10px] text-emerald-500 font-medium">Active now</p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-3 text-pink-500 text-sm">
+                    <i class="fa-solid fa-phone cursor-pointer hover:text-pink-600"></i>
+                    <i class="fa-solid fa-video cursor-pointer hover:text-pink-600"></i>
+                    <i class="fa-solid fa-circle-info cursor-pointer hover:text-pink-600"></i>
+                </div>
+            </div>
+
+            <!-- IG DM Chat Stream Box Container (ประมาณ 10 ข้อความ) -->
+            <div id="chat-box" class="my-3 flex-1 overflow-y-auto max-h-[380px] px-1 space-y-2.5 text-left custom-scroll pr-2">
+                <!-- ข้อความจะทยอยถูกเรนเดอร์ผ่าน JavaScript ที่นี่ -->
+            </div>
+
+            <!-- Typing indicator -->
+            <div id="typing-indicator" class="hidden text-left pl-2 mb-2">
+                <div class="inline-flex items-center gap-1 bg-pink-100/80 px-3 py-1.5 rounded-full text-xs text-pink-500">
+                    <span class="w-1.5 h-1.5 bg-pink-400 rounded-full animate-bounce"></span>
+                    <span class="w-1.5 h-1.5 bg-pink-400 rounded-full animate-bounce" style="animation-delay: 0.2s"></span>
+                    <span class="w-1.5 h-1.5 bg-pink-400 rounded-full animate-bounce" style="animation-delay: 0.4s"></span>
+                    <span class="text-[10px] text-gray-500 ml-1">กำลังพิมพ์...</span>
+                </div>
+            </div>
+
+            <!-- Action Buttons (ซ่อนไว้ก่อน พอแชทครบ 10 ข้อความค่อยแสดง) -->
+            <div id="action-buttons" class="mt-2 pt-2 border-t border-pink-100 hidden relative min-h-[60px] flex items-center justify-center gap-3">
+                <!-- ปุ่มสีชมพู (กดแล้วเปิดซองจดหมาย) -->
+                <button onclick="openLetterModal()" class="w-1/2 bg-gradient-to-r from-pink-400 to-rose-400 hover:from-pink-500 hover:to-rose-500 text-white font-semibold py-2.5 px-3 rounded-2xl shadow-lg active:scale-95 transition-all text-xs flex items-center justify-center gap-1.5 z-10">
+                    <i class="fa-solid fa-envelope-open-text"></i> ยอมใจอ่อน / อภัยนะ 💖
+                </button>
+
+                <!-- ปุ่มสีดำ (กิมมิกย้ายตำแหน่งหนีเมื่อกดหรือแตะ!) -->
+                <button id="dodging-btn" onmouseover="dodgeButton()" onclick="dodgeButton()" ontouchstart="dodgeButton(event)" class="w-1/2 bg-gray-900 hover:bg-black text-white font-semibold py-2.5 px-3 rounded-2xl shadow-md transition-all text-xs flex items-center justify-center gap-1.5 absolute right-0 z-20">
+                    ยังไม่ยกโทษให้ 😤
+                </button>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- ========================================== -->
+    <!-- Pop-up ซองจดหมายเปิดความในใจ (Modal) -->
+    <!-- ========================================== -->
+    <div id="letter-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden opacity-0 transition-opacity duration-300">
+        <div class="bg-amber-50/95 w-full max-w-sm rounded-3xl p-5 shadow-2xl border-4 border-pink-200 relative max-h-[85vh] flex flex-col transform scale-90 transition-transform duration-300 custom-scroll overflow-y-auto">
+            
+            <!-- Close Modal Button -->
+            <button onclick="closeLetterModal()" class="absolute top-3 right-3 text-gray-400 hover:text-gray-700 bg-white rounded-full w-8 h-8 flex items-center justify-center shadow">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+
+            <!-- Letter Envelope Graphic Header -->
+            <div class="text-center my-2">
+                <div class="text-4xl animate-bounce inline-block">💌</div>
+                <h3 class="text-lg font-bold text-rose-600 mt-1">จดหมายขออ้วนคืนดี 💖</h3>
+                <div class="w-16 h-1 bg-pink-300 mx-auto rounded-full my-2"></div>
+            </div>
+
+            <!-- เนื้อหาจดหมาย (ข้อความยาวให้ผู้ใช้เปลี่ยนได้) -->
+            <div class="text-gray-700 text-xs leading-relaxed space-y-3 px-1 my-2 text-left font-light">
+                <!-- ✏️ [แก้ไขข้อความในจดหมายบรรทัดที่ 1] -->
+                <p class="font-medium text-pink-700 text-sm">ถึงน้องวัน... คนที่เค้าชอบมาดดดคนเดียวด้วย 💕</p>
+                
+                <!-- ✏️ [แก้ไขข้อความในจดหมายบรรทัดที่ 2] -->
+                <p>
+                    เค้าอยากจะบอกขอโทษเเล้วอยากให้เธอรุ้สึกดีขึ้น เค้าไม่ได้ตั้งใจจะทำให้เธอเสียใจเลยนะ เค้าพยายามทำเว้บนี้เผื่อเธอจะให้อภัยเค้าได้บ้าง พอเห็นเธอซึมเค้าก็รู้สึกแย่และเสียใจมากๆ เหมือนกัน 🥺
+                </p>
+
+                <!-- ✏️ [แก้ไขข้อความในจดหมายบรรทัดที่ 3] -->
+                <p>
+                    น้องวันเป็นทั้งความสุขของเค้า เค้าอยากจะทำให้น้องวันมีความสุขบ้าง เค้าขอโทดที่ละเลยที่ทำตัวเเย่เเละไม่เข้าใจความรุ้สึกน้องวันเลย ตอนนี้พี่เข้าใจน้องวันอย่างน้อยก้อยากให้สิ่งนี้ทำให้น้องวันยิ้มได้บ้าง
+                </p>
+
+                <!-- ✏️ [แก้ไขข้อความในจดหมายบรรทัดที่ 4] -->
+                <p class="bg-pink-100/70 p-2.5 rounded-xl border-l-4 border-pink-400 text-pink-800 italic">
+                    "สัญญาว่าจะปรับปรุงตัว จะดูแลน้องวันให้ดีขึ้น และจะไม่ทำให้น้องวันต้องร้องไห้ เเละเสียครสเเบบนี้อีกให้อภัยพี่บุมนะคะน้องวัน 🥺✨"
+                </p>
+            </div>
+
+            <!-- กรอบรูปความทรงจำคู่ในจดหมาย (Scroll ดูได้) -->
+            <div class="my-4">
+                <h4 class="text-xs font-semibold text-gray-600 mb-2 text-left flex items-center gap-1">
+                    <i class="fa-solid fa-camera-retro text-pink-400"></i> ความทรงจำดีๆ ของเรา 📸
+                </h4>
+                
+                <div class="grid grid-cols-2 gap-2">
+                    <!-- 📸 [แก้ไขรูปความทรงจำที่ 1] -->
+                    <div class="bg-white p-1.5 rounded-xl shadow-sm border border-pink-100">
+                        <img src="boomandwansuk.jpg" 
+                             alt="boomandwansuk" class="w-full h-24 object-cover rounded-lg"
+                             onerror="this.src='https://placehold.co/300x300/F8BBD0/880E4F?text=Sweet+Time';">
+                        <p class="text-[10px] text-gray-500 mt-1 text-center font-medium">เด่กอ้วนกะหม๋าเเก่เขินจังหึหึหึ 🍦</p>
+                    </div>
+
+                    <!-- 📸 [แก้ไขรูปความทรงจำที่ 2] -->
+                    <div class="bg-white p-1.5 rounded-xl shadow-sm border border-pink-100">
+                        <img src="wansuk.png" 
+                             alt="wansuk" class="w-full h-24 object-cover rounded-lg"
+                             onerror="this.src='https://placehold.co/300x300/E1BEE7/4A148C?text=Happy+Days';">
+                        <p class="text-[10px] text-gray-500 mt-1 text-center font-medium">รอยยิ้มน่ารักๆของน้องวัน 🌻</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ปุ่มกอด / คืนดี -->
+            <div class="text-center mt-2">
+                <button onclick="hugAction()" class="w-full bg-gradient-to-r from-pink-400 via-rose-400 to-purple-400 text-white font-semibold py-2.5 rounded-xl shadow-lg active:scale-95 transition-all text-xs flex items-center justify-center gap-2">
+                    <span>ดีกันนะ! กอดๆ กันหน่อย 🤗💖</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Message Toast Alert (แทนการใช้ alert สติ๊กเกอร์ป็อปอัป) -->
+    <div id="custom-toast" class="fixed top-5 left-1/2 -translate-x-1/2 bg-white/90 backdrop-blur-md border border-pink-200 text-gray-800 text-xs px-4 py-2.5 rounded-full shadow-xl z-50 flex items-center gap-2 transition-all duration-300 opacity-0 pointer-events-none">
+        <span id="toast-icon">✨</span>
+        <span id="toast-message">แจ้งเตือน</span>
+    </div>
+
+    <!-- JavaScript Logic -->
+    <script>
+        /* ==========================================
+           1. การตั้งค่ารหัสผ่าน PIN & ข้อความแชท
+           ========================================== */
+        
+        // 🔑 [แก้ไขรหัสผ่าน PIN 6 หลักตรงนี้]:
+        const CORRECT_PIN = "240910"; 
+        let enteredPin = "";
+
+        // 💬 [แก้ไขข้อความแชท IG 10 ช่องตรงนี้]: 
+        // ปรับแต่งข้อความที่จะทยอยส่งในหน้า 3 ได้ตามต้องการ
+        const chatMessages = [
+            "เค้าขอโทษนะ... 🥺",
+            "เค้ารู้ว่าทำให้น้องวันเสียครสเค้าผิดจริงๆ",
+            "ไม่ได้ตั้งใจจะทำให้น้องวันเสียใจเลยนะเค้าขอโทษ",
+            "ตอนที่น้องวันไม่คุยด้วย เค้าใจเสียมากเลย 😢",
+            "คิดถึงรอยยิ้ม คิดถึงเสียงน่ารักๆของน้องวันที่สุด",
+            "ให้เค้าเลี้ยงหมึกกรุบไถ่โทษด้ายม้าย 🧋✨",
+            "เค้าพร้อมจะทำทุกอย่างที่น้องวันขอสิ่งที่เค้าทำมันผิดมากจริงๆ",
+            "อย่าโกรธเค้านานเลยนะคะ หัวใจเค้าจะแตกสลายแล้ว 💔",
+            "ยกโทษให้เค้านะคะน้องวัน 💖",
+            "น้องวันลองเปิดจดหมายข้างล่างอ่านดูหน่อยสิคะ 💌👇"
+        ];
+
+        /* ==========================================
+           2. หน้าที่ 1: ระบบ PIN Code
+           ========================================== */
+        
+        function pressKey(num) {
+            if (enteredPin.length < 6) {
+                enteredPin += num;
+                updatePinDots();
+                
+                // ถ้าใส่ครบ 6 หลัก ตรวจสอบรหัสทันที
+                if (enteredPin.length === 6) {
+                    setTimeout(checkPin, 200);
+                }
+            }
+        }
+
+        function deleteKey() {
+            if (enteredPin.length > 0) {
+                enteredPin = enteredPin.slice(0, -1);
+                updatePinDots();
+            }
+        }
+
+        function updatePinDots() {
+            const dots = document.querySelectorAll('.pin-dot');
+            dots.forEach((dot, index) => {
+                if (index < enteredPin.length) {
+                    dot.classList.add('bg-pink-400', 'border-pink-500', 'pin-pop');
+                } else {
+                    dot.classList.remove('bg-pink-400', 'border-pink-500', 'pin-pop');
+                }
+            });
+        }
+
+        function checkPin() {
+            const screen1 = document.getElementById('screen-1');
+            const errorMsg = document.getElementById('pin-error-msg');
+
+            if (enteredPin === CORRECT_PIN) {
+                showToast("🔓 รหัสผ่านถูกต้องแล้วเด่กอ้วน!", "💖");
+                // เปลี่ยนไปหน้าที่ 2
+                setTimeout(() => {
+                    screen1.classList.add('hidden');
+                    startLoadingScreen();
+                }, 400);
+            } else {
+                // เอฟเฟกต์สั่นเมื่อรหัสผิด
+                screen1.classList.add('animate-shake');
+                errorMsg.classList.remove('opacity-0');
+                
+                setTimeout(() => {
+                    screen1.classList.remove('animate-shake');
+                }, 400);
+
+                // ล้างรหัสเพื่อให้กดใหม่
+                setTimeout(() => {
+                    enteredPin = "";
+                    updatePinDots();
+                }, 800);
+            }
+        }
+
+        function showHint() {
+            showToast(`คำใบ้:  วันเกิดของคนน่ารักงาย 🗝️`, "💡");
+        }
+
+        /* ==========================================
+           3. หน้าที่ 2: ระบบ Loading Heart Bar
+           ========================================== */
+        
+        function startLoadingScreen() {
+            const screen2 = document.getElementById('screen-2');
+            screen2.classList.remove('hidden');
+
+            let progress = 0;
+            const progressBar = document.getElementById('progress-bar-fill');
+            const percentageText = document.getElementById('loading-percentage');
+            const statusText = document.getElementById('loading-status-text');
+            const subtext = document.getElementById('loading-subtext');
+
+            const loadingInterval = setInterval(() => {
+                progress += Math.floor(Math.random() * 8) + 4; // สุ่มเพิ่ม %
+                
+                if (progress >= 100) {
+                    progress = 100;
+                    clearInterval(loadingInterval);
+                    
+                    // เมื่อครบ 100%
+                    progressBar.style.width = `100%`;
+                    percentageText.innerText = `100%`;
+                    statusText.innerText = "โหลดเสร็จสมบูรณ์!";
+                    subtext.innerText = "พร้อมรับความรักจากพี่บุมยางคะ? ❤️";
+                    
+                    setTimeout(() => {
+                        screen2.classList.add('hidden');
+                        startChatScreen();
+                    }, 1000);
+                } else {
+                    progressBar.style.width = `${progress}%`;
+                    percentageText.innerText = `${progress}%`;
+
+                    // เปลี่ยนข้อความประกอบน่ารักๆ ตาม %
+                    if (progress > 20 && progress <= 50) {
+                        statusText.innerText = "เค้ากำลังหาวิธีง้อเธออยู่...";
+                        subtext.innerText = "เตรียมยกโทษให้เค้าเยย... 💌";
+                    } else if (progress > 50 && progress <= 80) {
+                        statusText.innerText = "น้องวันอย่าพึ่งทิ้งเค้านะคะ...";
+                        subtext.innerText = "เกือบเสร็จแล้วเด่กอ้วนนน 🌸";
+                    } else if (progress > 80) {
+                        statusText.innerText = "กำลังจะเปิดความน่ารักของพี่บุมหึหึหึ...";
+                        subtext.innerText = "ใจเต้นตุ้บๆๆแล้ว! 💓";
+                    }
+                }
+            }, 180);
+        }
+
+        /* ==========================================
+           4. หน้าที่ 3: ระบบ IG Chat & ทยอยเด้งแชท
+           ========================================== */
+        
+        function startChatScreen() {
+            const screen3 = document.getElementById('screen-3');
+            screen3.classList.remove('hidden');
+
+            const chatBox = document.getElementById('chat-box');
+            const typingIndicator = document.getElementById('typing-indicator');
+            let messageIndex = 0;
+
+            function streamNextMessage() {
+                if (messageIndex < chatMessages.length) {
+                    // แสดง typing indicator ชั่วคราว
+                    typingIndicator.classList.remove('hidden');
+                    chatBox.scrollTop = chatBox.scrollHeight;
+
+                    setTimeout(() => {
+                        typingIndicator.classList.add('hidden');
+                        
+                        // สร้าง Bubble ข้อความฝั่งตรงข้าม
+                        const msgBubble = document.createElement('div');
+                        msgBubble.className = "flex gap-2 items-end mb-2 animate-fade-in";
+                        msgBubble.innerHTML = `
+                            <img src="https://placehold.co/100x100/F48FB1/ffffff?text=💖" class="w-6 h-6 rounded-full border border-pink-300">
+                            <div class="bg-pink-100/90 text-gray-800 text-xs px-3 py-2 rounded-2xl rounded-bl-none max-w-[80%] shadow-sm border border-pink-200/50">
+                                ${chatMessages[messageIndex]}
+                            </div>
+                        `;
+                        
+                        chatBox.appendChild(msgBubble);
+                        chatBox.scrollTop = chatBox.scrollHeight;
+                        
+                        messageIndex++;
+                        // สุ่มเวลารอข้อความถัดไป
+                        setTimeout(streamNextMessage, 1200);
+                    }, 800);
+                } else {
+                    // เมื่อแสดงข้อความครบ 10 ช่อง ให้เปิดปุ่มคำตอบ
+                    setTimeout(() => {
+                        document.getElementById('action-buttons').classList.remove('hidden');
+                        showToast("กดปุ่มเพื่อตอบกลับเค้านะ 💕", "💌");
+                    }, 500);
+                }
+            }
+
+            streamNextMessage();
+        }
+
+        /* ==========================================
+           5. กิมมิกปุ่มสีดำย้ายตำแหน่งหนี (Dodging Button)
+           ========================================== */
+        
+        function dodgeButton(event) {
+            if (event) event.preventDefault();
+            const btn = document.getElementById('dodging-btn');
+            
+            // สุ่มพิกัดใหม่ในขอบเขตหน้าจอ
+            const randomX = Math.floor(Math.random() * 180) - 90; // -90 ถึง 90 px
+            const randomY = Math.floor(Math.random() * 140) - 70; // -70 ถึง 70 px
+            
+            btn.style.transform = `translate(${randomX}px, ${randomY}px)`;
+            
+            // สุ่มคำเตือนน่ารักๆ เวลาพยายามกดปุ่มสีดำ
+            const dodgeTexts = ["กดไม่ทันหรอก 😜", "ไม่อนุญาตให้กด 🙈", "ยกโทษให้เถอะน้า 🥺", "ปุ่มนี้กดไม่ได้หรอก 💖"];
+            const randomText = dodgeTexts[Math.floor(Math.random() * dodgeTexts.length)];
+            showToast(randomText, "🏃♂️");
+        }
+
+        /* ==========================================
+           6. ระบบ Modal ซองจดหมาย & คำขอโทษ
+           ========================================== */
+        
+        function openLetterModal() {
+            const modal = document.getElementById('letter-modal');
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                modal.classList.remove('opacity-0');
+                modal.firstElementChild.classList.remove('scale-90');
+                modal.firstElementChild.classList.add('scale-100');
+            }, 50);
+            
+            createHeartConfetti();
+        }
+
+        function closeLetterModal() {
+            const modal = document.getElementById('letter-modal');
+            modal.classList.add('opacity-0');
+            modal.firstElementChild.classList.remove('scale-100');
+            modal.firstElementChild.classList.add('scale-90');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 300);
+        }
+
+        function hugAction() {
+            showToast("เย้! เค้าจากอดๆ น้องวันเเน่นๆๆเยยยย ขอบคุณที่ยกโทษให้นะคะ 🥰💖", "🎉");
+            createHeartConfetti();
+            setTimeout(closeLetterModal, 2500);
+        }
+
+        /* ==========================================
+           7. Helper Functions: Toast Notification & Heart Particles
+           ========================================== */
+        
+        function showToast(message, icon = "✨") {
+            const toast = document.getElementById('custom-toast');
+            document.getElementById('toast-message').innerText = message;
+            document.getElementById('toast-icon').innerText = icon;
+            
+            toast.classList.remove('opacity-0', 'pointer-events-none');
+            toast.classList.add('opacity-100');
+            
+            setTimeout(() => {
+                toast.classList.remove('opacity-100');
+                toast.classList.add('opacity-0', 'pointer-events-none');
+            }, 2500);
+        }
+
+        // เอฟเฟกต์หัวใจลอยกระจายเมื่อเปิดจดหมาย
+        function createHeartConfetti() {
+            const colors = ['#F48FB1', '#FF4081', '#E1BEE7', '#B2DFDB'];
+            for (let i = 0; i < 20; i++) {
+                const heart = document.createElement('div');
+                heart.innerText = ['💖', '🌸', '✨', '💕'][Math.floor(Math.random() * 4)];
+                heart.style.position = 'fixed';
+                heart.style.left = Math.random() * 100 + 'vw';
+                heart.style.top = '100vh';
+                heart.style.fontSize = (Math.random() * 15 + 15) + 'px';
+                heart.style.zIndex = '9999';
+                heart.style.pointerEvents = 'none';
+                heart.style.transition = 'transform 3s ease-out, opacity 3s ease-out';
+                
+                document.body.appendChild(heart);
+                
+                setTimeout(() => {
+                    heart.style.transform = `translateY(-${Math.random() * 80 + 100}vh) rotate(${Math.random() * 360}deg)`;
+                    heart.style.opacity = '0';
+                }, 50);
+
+                setTimeout(() => {
+                    heart.remove();
+                }, 3200);
+            }
+        }
+    </script>
+</body>
+</html>
